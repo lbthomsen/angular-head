@@ -3,7 +3,7 @@
   "description": "Angular head service and directives",
   "main": "angular-head.js",
   "authors": [
-    "Lars Boegild Thomsen <lth@cow.dk>"
+    "Lars Boegild Thomsen <lbthomsen@gmail.com>"
   ],
   "license": "MIT",
   "keywords": [
