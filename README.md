@@ -1,18 +1,26 @@
-The angular-head module is designed to manipulate html header values on the fly.
+# Introduction
 
-Usage steps:
+The angular-head module is designed to manipulate html head values (title and meta tags) on the fly.
 
-1. Install with bower:
+# Installation
 
+The angular-head module can be installed using bower:
+
+````
 $ bower install angular-head --save
+```
 
-2. Load javascript
+# Load script
 
+```
 <script type="text/javascript" src="bower_components/angular-head/angular-head.js"></script>
+```
 
-3. Inject in Angular
+# Inject Angular dependency
 
+```
 var app = angular.module("app", ["angular-head"]);
+```
 
 4. Configure during configuration phase
 
