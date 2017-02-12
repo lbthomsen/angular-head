@@ -24,23 +24,23 @@
             that.setMetas = function (metas) {
                 that.metas = metas;
             };
-            
-            that.setJsonLd = function(defaultJsonLd) {
+
+            that.setJsonLd = function (defaultJsonLd) {
                 that.jsonLd = defaultJsonLd;
             };
-            
-            that.useRoute = function(useRoute) {
+
+            that.useRoute = function (useRoute) {
                 that.useRoute = useRoute;
             };
 
-            that.$get = ["$log", "$rootScope", 
+            that.$get = ["$log", "$rootScope",
                 function ($log, $rootScope) {
                     $log.debug("HeadService: starting");
 
                     var me = {
                         title: "",
                         metas: [],
-                        jsonLd: {}, 
+                        jsonLd: {},
                         setTitle: function (title) {
                             if (title) {
                                 me.title = title + " | " + that.title;
@@ -48,27 +48,27 @@
                                 me.title = that.title;
                             }
                         },
-                        setMeta: function(newMeta) {
+                        setMeta: function (newMeta) {
                             $log.debug("HeadService: setting meta: %o", newMeta);
                             // See if we can find an old one
-                            var meta = me.metas.find(function(meta) {
+                            var meta = me.metas.find(function (meta) {
                                 if (newMeta.name) {
                                     return meta.name === newMeta.name;
                                 } else {
                                     return meta.property === newMeta.property;
                                 }
                             });
-                            
+
                             if (meta) {
                                 // Found one - replacing
                                 angular.copy(newMeta, meta);
                             } else {
                                 me.metas.push(newMeta);
                             }
-                        }, 
-                        addMeta: function(newMeta) {
+                        },
+                        addMeta: function (newMeta) {
                             me.metas.push(newMeta);
-                        }, 
+                        },
                         reset: function () {
                             me.title = that.title;
                             me.metas.length = 0;
@@ -78,21 +78,21 @@
                             me.jsonLd = that.jsonLd;
                         }
                     };
-                    
+
                     if (that.useRoute) {
-                        $rootScope.$on("$routeChangeSuccess", function(event, current, previous) {
+                        $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
                             $log.debug("HeadService: routeChangeSuccess - current: %o", current);
-                            
+
                             if (current.$$route.title) {
                                 me.setTitle(current.$$route.title);
                             }
-                            
+
                             if (current.$$route.metas) {
                                 for (var i = 0, len = current.$$route.metas.length; i < len; ++i) {
                                     me.setMeta(current.$$route.metas[i]);
                                 }
                             }
-                            
+
                         });
                     }
 
@@ -153,83 +153,83 @@
             };
         }
     ]);
-    
-    module.directive("dynamicMetas", ["$log", 
-        function($log) {
+
+    module.directive("dynamicMetas", ["$log",
+        function ($log) {
             return {
-                restrict: 'A', 
-                controller: ["$log", "HeadService", 
-                    function($log, headService) {
+                restrict: 'A',
+                controller: ["$log", "HeadService",
+                    function ($log, headService) {
                         $log.debug("DynamicMetasCtrl: starting");
-                        
+
                         var that = this;
-                        
+
                         that.headService = headService;
                     }
-                ], 
-                controllerAs: "dynamicMetasCtrl", 
-                replace: true, 
+                ],
+                controllerAs: "dynamicMetasCtrl",
+                replace: true,
                 template: '<meta data-ng-repeat="meta in dynamicMetasCtrl.headService.metas" data-ng-attr-name="{{meta.name}}" data-ng-attr-property="{{meta.property}}" data-ng-attr-content="{{meta.content}}"/>'
             };
         }
     ]);
-    
-    module.directive("jsonLd", ["$log", 
-        function($log) {
+
+    module.directive("jsonLd", ["$log",
+        function ($log) {
             return {
-                restrict: 'A', 
-                controller: ["$log", "HeadService", 
-                    function($log, headService) {
+                restrict: 'A',
+                controller: ["$log", "HeadService",
+                    function ($log, headService) {
                         $log.debug("JsonLdController: starting");
-                        
+
                         var that = this;
-                        
+
                         that.headService = headService;
                     }
-                ], 
-                controllerAs: "jsonLdCtrl", 
-                replace: true, 
+                ],
+                controllerAs: "jsonLdCtrl",
+                replace: true,
                 template: '<script type="application/ld+json" data-ng-bind="jsonLdCtrl.headService.jsonLd"></script>'
             };
         }
     ]);
 
-    module.directive("setTitle", ["$log", 
-        function($log) {
+    module.directive("setTitle", ["$log",
+        function ($log) {
             return {
-                restrict: 'E', 
+                restrict: 'E',
                 scope: {
                     title: "@"
-                }, 
-                controller: ["$log", "$scope", "HeadService", 
-                    function($log, $scope, headService) {
+                },
+                controller: ["$log", "$scope", "HeadService",
+                    function ($log, $scope, headService) {
                         headService.setTitle($scope.title);
                     }
-                ], 
-                replace: true, 
+                ],
+                replace: true,
                 templateuRL: "views/empty.html"
             };
         }
     ]);
-    
-    module.directive("setMeta", ["$log", 
-        function($log) {
+
+    module.directive("setMeta", ["$log",
+        function ($log) {
             return {
-                restrict: 'E', 
+                restrict: 'E',
                 scope: {
-                    name: "@", 
-                    property: "@", 
+                    name: "@",
+                    property: "@",
                     content: "@"
-                }, 
-                controller: ["$log", "$scope", "HeadService", 
-                    function($log, $scope, headService) {
+                },
+                controller: ["$log", "$scope", "HeadService",
+                    function ($log, $scope, headService) {
                         if ($scope.name) {
                             headService.setMeta({name: $scope.name, content: $scope.content});
                         } else if ($scope.property) {
                             headService.setMeta({property: $scope.property, content: $scope.content});
                         }
                     }
-                ], 
+                ],
                 replace: true
             };
         }
