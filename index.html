@@ -1,0 +1,65 @@
+<html ng-app="app">
+    <head>
+        <title>Undefined</title>
+    </head>
+    <body ng-controller="BodyController as bodyCtrl">
+        <set-title title="Demo"/>
+        <h1>Angular-head Demo</h1>
+        <p>
+            This page demonstrates the use of the angular-head module (<a href="https://github.com/lbthomsen/angular-lead">Github Src</a>).
+        </p>
+        <p>
+            The title of this browser window should now change once every second.
+        </p>
+        <p>
+            Setting title to: {{bodyCtrl.title}}
+        </p>
+    </body>
+    <script type="text/javascript" src="bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="angular-head.js"></script>
+    <script type="text/javascript">
+
+        var app = angular.module("app", [
+            'angular-head'
+        ]);
+
+        app.config(['HeadServiceProvider',
+            function (headServiceProvider) {
+
+                headServiceProvider.setTitle("Angular-Head Demo");
+
+            }
+        ]);
+
+        app.controller("BodyController", ["$interval",  "HeadService", 
+            function($interval, headService) {
+
+                var titles = [
+                    "Title 1", 
+                    "Title 2", 
+                    "Title 3", 
+                    "Title 4", 
+                    "Title 5", 
+                    "Title 6", 
+                    "Title 7", 
+                    "Title 8", 
+                    "Title 9", 
+                ];
+
+                var that = this;
+                that.title = titles[0];
+
+                $interval(function() {
+                    headService.setTitle(that.title);
+                    that.title = titles[Math.floor(Math.random() * titles.length)];
+                }, 1000);
+                
+
+            }
+        ]);
+
+    </script>
+</html>
+<!--+
+    | vim: ts=4 et nowrap autoindent
+    +-->
