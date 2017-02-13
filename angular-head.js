@@ -14,7 +14,6 @@
             var that = this;
             that.title = "Unconfigured HeadService";
             that.metas = [];
-            that.jonLd = {};
             that.useRoute = false;
 
             that.setTitle = function (title) {
@@ -25,14 +24,6 @@
                 that.metas = metas;
             };
 
-            that.setJsonLd = function (defaultJsonLd) {
-                that.jsonLd = defaultJsonLd;
-            };
-
-            that.useRoute = function (useRoute) {
-                that.useRoute = useRoute;
-            };
-
             that.$get = ["$log", "$rootScope",
                 function ($log, $rootScope) {
                     $log.debug("HeadService: starting");
@@ -40,7 +31,6 @@
                     var me = {
                         title: "",
                         metas: [],
-                        jsonLd: {},
                         setTitle: function (title) {
                             if (title) {
                                 me.title = title + " | " + that.title;
@@ -75,7 +65,6 @@
                             for (var i = 0, len = that.metas.length; i < len; ++i) {
                                 me.metas.push(that.metas[i]);
                             }
-                            me.jsonLd = that.jsonLd;
                         }
                     };
 

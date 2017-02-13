@@ -31,7 +31,6 @@ of the application.
 app.config(["HeadServiceProvider", 
     function (headServiceProvider) {
 
-	headServiceProvider.useRoute(true); // Define if ngRoute is used
         headServiceProvider.setTitle("Test Application");
         headServiceProvider.setDefaultMetas([
             {
