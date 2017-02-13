@@ -79,22 +79,25 @@
                         }
                     };
 
-                    if (that.useRoute) {
-                        $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
-                            $log.debug("HeadService: routeChangeSuccess - current: %o", current);
+                    $rootScope.$on("$routeChangeStart", function () {
+                        $log.debug("HeadService: routeChangeStart - resetting header");
+                        me.reset();
+                    });
 
-                            if (current.$$route.title) {
-                                me.setTitle(current.$$route.title);
+                    $rootScope.$on("$routeChangeSuccess", function (event, current, previous) {
+                        $log.debug("HeadService: routeChangeSuccess - current: %o", current);
+
+                        if (current.$$route.title) {
+                            me.setTitle(current.$$route.title);
+                        }
+
+                        if (current.$$route.metas) {
+                            for (var i = 0, len = current.$$route.metas.length; i < len; ++i) {
+                                me.setMeta(current.$$route.metas[i]);
                             }
+                        }
 
-                            if (current.$$route.metas) {
-                                for (var i = 0, len = current.$$route.metas.length; i < len; ++i) {
-                                    me.setMeta(current.$$route.metas[i]);
-                                }
-                            }
-
-                        });
-                    }
+                    });
 
                     return me;
 
@@ -134,17 +137,13 @@
                         $log.debug("TitleController: starting - scope is: %o ", $scope);
 
                         var that = this;
+                        that.headService = headService;
 
                         $scope.$watch(function () {
                             return headService.title;
                         }, function () {
                             $log.debug("TitleController: headService.title has changed - now: %o", headService.title);
                             $scope.title.innerText = headService.title;
-                        });
-
-                        $scope.$on("$routeChangeStart", function () {
-                            $log.debug("TitleController: route is changing - resetting header");
-                            headService.reset();
                         });
 
                     }
