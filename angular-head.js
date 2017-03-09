@@ -13,7 +13,7 @@
 
             var that = this;
             that.title = "Unconfigured HeadService";
-            that.metas = [];
+            that.metas = {};
             that.useRoute = false;
 
             that.setTitle = function (title) {
@@ -29,8 +29,10 @@
                     $log.debug("HeadService: starting");
 
                     var me = {
+                        defaultTitle: that.title, 
+                        defaultMetas: that.metas, 
                         title: "",
-                        metas: [],
+                        metas: {},
                         setTitle: function (title) {
                             if (title) {
                                 me.title = title + " | " + that.title;
@@ -38,33 +40,15 @@
                                 me.title = that.title;
                             }
                         },
-                        setMeta: function (newMeta) {
-                            $log.debug("HeadService: setting meta: %o", newMeta);
-                            // See if we can find an old one
-                            var meta = me.metas.find(function (meta) {
-                                if (newMeta.name) {
-                                    return meta.name === newMeta.name;
-                                } else {
-                                    return meta.property === newMeta.property;
-                                }
-                            });
-
-                            if (meta) {
-                                // Found one - replacing
-                                angular.copy(newMeta, meta);
-                            } else {
-                                me.metas.push(newMeta);
-                            }
-                        },
-                        addMeta: function (newMeta) {
-                            me.metas.push(newMeta);
+                        setMeta: function (name, description) {
+                            $log.debug("HeadService: setting meta: %o", name);
+                            me.metas[name] = description;
                         },
                         reset: function () {
+                            $log.debug("HeadService: reset");
                             me.title = that.title;
-                            me.metas.length = 0;
-                            for (var i = 0, len = that.metas.length; i < len; ++i) {
-                                me.metas.push(that.metas[i]);
-                            }
+                            //me.metas = that.metas;
+                            angular.copy(that.metas, me.metas);
                         }
                     };
 
@@ -87,30 +71,14 @@
                         }
 
                     });
+                    
+                    me.reset();
 
                     return me;
 
                 }
             ];
 
-        }
-    ]);
-
-    module.directive('head', ["$log",
-        function ($log) {
-            return {
-                restrict: 'E',
-                scope: false,
-                controller: ["$log", "HeadService",
-                    function ($log, headService) {
-                        $log.debug("HeadController: starting");
-
-                        var that = this;
-                        that.headService = headService;
-                    }
-                ],
-                controllerAs: "headCtrl"
-            };
         }
     ]);
 
@@ -141,23 +109,44 @@
             };
         }
     ]);
-
-    module.directive("dynamicMetas", ["$log",
+    
+    module.directive('meta', ["$log",
         function ($log) {
             return {
-                restrict: 'A',
-                controller: ["$log", "HeadService",
-                    function ($log, headService) {
-                        $log.debug("DynamicMetasCtrl: starting");
+                restrict: 'E',
+                link: function (scope, elem, attrs) {
+                    $log.debug("MetaDirective: link");
+                    // Store the element in the scope
+                    scope.meta = elem[0];
+                },
+                scope: {},
+                controller: ["$log", "$scope", "$window", "HeadService",
+                    function ($log, $scope, $window, headService) {
+                        $log.debug("MetaController: starting - scope is: %o ", $scope);
+                        
+                        $scope.$watch(function() {
+                            return $scope.meta;
+                        }, function() {
+                            if ($scope.meta) {
+                                if ($scope.meta.name) {
+                                    $log.debug("MetaController: got name %s", $scope.meta.name);
+                                    
+                                    // Now let's watch the service for that name
+                                    $scope.$watch(function() {
+                                        return headService.metas[$scope.meta.name];
+                                    }, function() {
+                                        $log.debug("MetaController: headService.metas[%o] = %o", $scope.meta.name, headService.metas[$scope.meta.name]);
+                                        $log.debug("MetaController: headService.metas = %o", headService.metas);
+                                        if (headService.metas[$scope.meta.name]) {
+                                            $scope.meta.content = headService.metas[$scope.meta.name];
+                                        }
+                                    });                                    
+                                }
+                            }
+                        });
 
-                        var that = this;
-
-                        that.headService = headService;
                     }
-                ],
-                controllerAs: "dynamicMetasCtrl",
-                replace: true,
-                template: '<meta data-ng-repeat="meta in dynamicMetasCtrl.headService.metas" data-ng-attr-name="{{meta.name}}" data-ng-attr-property="{{meta.property}}" data-ng-attr-content="{{meta.content}}"/>'
+                ]
             };
         }
     ]);
@@ -206,16 +195,11 @@
                 restrict: 'E',
                 scope: {
                     name: "@",
-                    property: "@",
                     content: "@"
                 },
                 controller: ["$log", "$scope", "HeadService",
                     function ($log, $scope, headService) {
-                        if ($scope.name) {
-                            headService.setMeta({name: $scope.name, content: $scope.content});
-                        } else if ($scope.property) {
-                            headService.setMeta({property: $scope.property, content: $scope.content});
-                        }
+                        headService.setMeta($scope.name, $scope.content);
                     }
                 ],
                 replace: true

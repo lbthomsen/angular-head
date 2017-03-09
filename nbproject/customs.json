@@ -1,0 +1,11 @@
+{
+    "elements": {
+        "set-title": {},
+        "set-meta": {}
+    },
+    "attributes": {
+        "schema-org": {
+            "context": "script"
+        }
+    }
+}

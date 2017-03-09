@@ -1,9 +1,15 @@
 <html ng-app="app">
     <head>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        <meta name="keywords" content=""/>
+        <meta name="generator" content=""/>
         <title>Undefined</title>
+        <script type="application/json+ld" schema-org></script>
     </head>
     <body ng-controller="BodyController as bodyCtrl">
-        <set-title title="Demo"/>
+        <set-title title="Angular-Head Demo"/>
+        <set-meta name="description" content="Demonstration of Angular module angular-head"/>
         <h1>Angular-head Demo</h1>
         <p>
             This page demonstrates the use of the angular-head module (<a href="https://github.com/lbthomsen/angular-head">Github Src</a>).
@@ -14,7 +20,6 @@
         <p>
             Setting title to: {{bodyCtrl.title}}
         </p>
-    </body>
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="angular-head.js"></script>
     <script type="text/javascript">
@@ -25,8 +30,15 @@
 
         app.config(['HeadServiceProvider',
             function (headServiceProvider) {
-
+                
+                // This is where the HeadService default values are configured!
                 headServiceProvider.setTitle("Angular-Head Demo");
+                headServiceProvider.setMetas({
+                    description: "Set in page", 
+                    keywords: "angular,javascript", 
+                    author: "Lars Boegild Thomsen <lth@cow.dk>", 
+                    generator: "Angular"
+                });
 
             }
         ]);
@@ -43,7 +55,7 @@
                     "Title 6", 
                     "Title 7", 
                     "Title 8", 
-                    "Title 9", 
+                    "Title 9"
                 ];
 
                 var that = this;
@@ -51,6 +63,7 @@
 
                 $interval(function() {
                     headService.setTitle(that.title);
+                    headService.setMeta("keywords", that.title + "," + headService.defaultMetas["keywords"]);
                     that.title = titles[Math.floor(Math.random() * titles.length)];
                 }, 1000);
                 
@@ -59,6 +72,7 @@
         ]);
 
     </script>
+    </body>
 </html>
 <!--+
     | vim: ts=4 et nowrap autoindent
