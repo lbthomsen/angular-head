@@ -8,71 +8,84 @@
         <script type="application/json+ld" schema-org></script>
     </head>
     <body ng-controller="BodyController as bodyCtrl">
-        <set-title title="Angular-Head Demo"/>
-        <set-meta name="description" content="Demonstration of Angular module angular-head"/>
-        <h1>Angular-head Demo</h1>
-        <p>
-            This page demonstrates the use of the angular-head module (<a href="https://github.com/lbthomsen/angular-head">Github Src</a>).
-        </p>
-        <p>
-            The title of this browser window should now change once every second.
-        </p>
-        <p>
-            Setting title to: {{bodyCtrl.title}}
-        </p>
+    <set-title title="Angular-Head Demo"/>
+    <set-meta name="description" content="Demonstration of Angular module angular-head"/>
+    <h1>Angular-head Demo</h1>
+    <p>
+        This page demonstrates the use of the angular-head module (<a href="https://github.com/lbthomsen/angular-head">Github Src</a>).
+    </p>
+    <p>
+        The title of this browser window should now change once every second.
+    </p>
+    <p>
+        Setting title to: {{bodyCtrl.title}}
+    </p>
     <script type="text/javascript" src="bower_components/angular/angular.js"></script>
     <script type="text/javascript" src="angular-head.js"></script>
     <script type="text/javascript">
 
-        var app = angular.module("app", [
-            'angular-head'
-        ]);
+                    var app = angular.module("app", [
+                        'angular-head'
+                    ]);
 
-        app.config(['HeadServiceProvider',
-            function (headServiceProvider) {
-                
-                // This is where the HeadService default values are configured!
-                headServiceProvider.setTitle("Angular-Head Demo");
-                headServiceProvider.setMetas({
-                    description: "Set in page", 
-                    keywords: "angular,javascript", 
-                    author: "Lars Boegild Thomsen <lth@cow.dk>", 
-                    generator: "Angular"
-                });
+                    app.config(['HeadServiceProvider',
+                        function (headServiceProvider) {
 
-            }
-        ]);
+                            // This is where the HeadService default values are configured!
+                            headServiceProvider.setTitle("Angular-Head Demo");
+                            headServiceProvider.setMetas({
+                                description: "Set in page",
+                                keywords: "angular,javascript",
+                                author: "Lars Boegild Thomsen <lth@cow.dk>",
+                                generator: "Angular"
+                            });
+                            headServiceProvider.setSchema({
 
-        app.controller("BodyController", ["$interval",  "HeadService", 
-            function($interval, headService) {
+                                "@context": "http://schema.org",
+                                "@type": "WebSite",
+                                "url": "https://lth.bright-things.com/angular-head/",
+                                "name": "Angular-Head Demonostration",
+                                "author": {
+                                    "@type": "Person",
+                                    "name": "Lars Boegild Thomsen"
+                                },
+                                "description": "Demonstration of the Angular module angular-head",
+                                "publisher": "Lars Boegild Thomsen",
+                                "potentialAction": {
+                                    "@type": "SearchAction",
+                                    "target": "http://www.example.com/?s={search_term}",
+                                    "query-input": "required name=search_term"}
 
-                var titles = [
-                    "Title 1", 
-                    "Title 2", 
-                    "Title 3", 
-                    "Title 4", 
-                    "Title 5", 
-                    "Title 6", 
-                    "Title 7", 
-                    "Title 8", 
-                    "Title 9"
-                ];
+                            });
+                        }
+                    ]);
 
-                var that = this;
-                that.title = titles[0];
+                    app.controller("BodyController", ["$interval", "HeadService",
+                        function ($interval, headService) {
 
-                $interval(function() {
-                    headService.setTitle(that.title);
-                    headService.setMeta("keywords", that.title + "," + headService.defaultMetas["keywords"]);
-                    that.title = titles[Math.floor(Math.random() * titles.length)];
-                }, 1000);
-                
-
-            }
-        ]);
+                            var titles = [
+                                "Title 1",
+                                "Title 2",
+                                "Title 3",
+                                "Title 4",
+                                "Title 5",
+                                "Title 6",
+                                "Title 7",
+                                "Title 8",
+                                "Title 9"
+                            ];
+                            var that = this;
+                            that.title = titles[0];
+                            $interval(function () {
+                                headService.setTitle(that.title);
+                                headService.setMeta("keywords", that.title + "," + headService.defaultMetas["keywords"]);
+                                that.title = titles[Math.floor(Math.random() * titles.length)];
+                            }, 1000);
+                        }
+                    ]);
 
     </script>
-    </body>
+</body>
 </html>
 <!--+
     | vim: ts=4 et nowrap autoindent

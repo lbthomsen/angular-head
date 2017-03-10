@@ -1,7 +1,16 @@
 {
     "elements": {
-        "set-title": {},
-        "set-meta": {}
+        "set-title": {
+            "attributes": {
+                "title": {}
+            }
+        },
+        "set-meta": {
+            "attributes": {
+                "name": {},
+                "content": {}
+            }
+        }
     },
     "attributes": {
         "schema-org": {

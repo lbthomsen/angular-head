@@ -14,6 +14,7 @@
             var that = this;
             that.title = "Unconfigured HeadService";
             that.metas = {};
+            that.schema = {};
             that.useRoute = false;
 
             that.setTitle = function (title) {
@@ -23,6 +24,10 @@
             that.setMetas = function (metas) {
                 that.metas = metas;
             };
+            
+            that.setSchema = function(schema) {
+                that.schema = schema;
+            };
 
             that.$get = ["$log", "$rootScope",
                 function ($log, $rootScope) {
@@ -31,8 +36,10 @@
                     var me = {
                         defaultTitle: that.title, 
                         defaultMetas: that.metas, 
+                        defaultSchema: that.schema, 
                         title: "",
                         metas: {},
+                        schema: {}, 
                         setTitle: function (title) {
                             if (title) {
                                 me.title = title + " | " + that.title;
@@ -46,9 +53,10 @@
                         },
                         reset: function () {
                             $log.debug("HeadService: reset");
-                            me.title = that.title;
+                            me.title = me.defaultTitle;
                             //me.metas = that.metas;
-                            angular.copy(that.metas, me.metas);
+                            angular.copy(me.defaultMetas, me.metas);
+                            angular.copy(me.defaultSchema, me.schema);
                         }
                     };
 
@@ -151,22 +159,22 @@
         }
     ]);
 
-    module.directive("jsonLd", ["$log",
+    module.directive("schemaOrg", ["$log",
         function ($log) {
             return {
                 restrict: 'A',
                 controller: ["$log", "HeadService",
                     function ($log, headService) {
-                        $log.debug("JsonLdController: starting");
+                        $log.debug("SchemaController: starting");
 
                         var that = this;
 
                         that.headService = headService;
                     }
                 ],
-                controllerAs: "jsonLdCtrl",
+                controllerAs: "schemaCtrl",
                 replace: true,
-                template: '<script type="application/ld+json" data-ng-bind="jsonLdCtrl.headService.jsonLd"></script>'
+                template: '<script type="application/ld+json" data-ng-bind="schemaCtrl.headService.schema"></script>'
             };
         }
     ]);
