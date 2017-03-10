@@ -54,9 +54,10 @@
                         reset: function () {
                             $log.debug("HeadService: reset");
                             me.title = me.defaultTitle;
-                            //me.metas = that.metas;
-                            angular.copy(me.defaultMetas, me.metas);
-                            angular.copy(me.defaultSchema, me.schema);
+                            if (me.defaultMetas.length) 
+                                angular.copy(me.defaultMetas, me.metas);
+                            if (me.defaultSchema.length) 
+                                angular.copy(me.defaultSchema, me.schema);
                         }
                     };
 
