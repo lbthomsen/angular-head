@@ -13,8 +13,8 @@
 
             var that = this;
             that.title = "Unconfigured HeadService";
-            that.metas = {};
-            that.schema = {};
+            that.metas = {foo:"bar"};
+            that.schema = {foo:"bar"};
             that.useRoute = false;
 
             that.setTitle = function (title) {
@@ -24,8 +24,8 @@
             that.setMetas = function (metas) {
                 that.metas = metas;
             };
-            
-            that.setSchema = function(schema) {
+
+            that.setSchema = function (schema) {
                 that.schema = schema;
             };
 
@@ -34,12 +34,12 @@
                     $log.debug("HeadService: starting");
 
                     var me = {
-                        defaultTitle: that.title, 
-                        defaultMetas: that.metas, 
-                        defaultSchema: that.schema, 
+                        defaultTitle: that.title,
+                        defaultMetas: {},
+                        defaultSchema: {},
                         title: "",
                         metas: {},
-                        schema: {}, 
+                        schema: {},
                         setTitle: function (title) {
                             if (title) {
                                 me.title = title + " | " + that.title;
@@ -54,9 +54,9 @@
                         reset: function () {
                             $log.debug("HeadService: reset");
                             me.title = me.defaultTitle;
-                            if (me.defaultMetas.length) 
+                            if (me.defaultMetas.length)
                                 angular.copy(me.defaultMetas, me.metas);
-                            if (me.defaultSchema.length) 
+                            if (me.defaultSchema.length)
                                 angular.copy(me.defaultSchema, me.schema);
                         }
                     };
@@ -80,7 +80,12 @@
                         }
 
                     });
-                    
+
+                    if (Object.keys(that.metas).length)
+                        angular.copy(that.metas, me.metas);
+                    if (Object.keys(that.schema).length)
+                        angular.copy(that.schema, me.schema);
+
                     me.reset();
 
                     return me;
@@ -118,7 +123,7 @@
             };
         }
     ]);
-    
+
     module.directive('meta', ["$log",
         function ($log) {
             return {
@@ -132,24 +137,24 @@
                 controller: ["$log", "$scope", "$window", "HeadService",
                     function ($log, $scope, $window, headService) {
                         $log.debug("MetaController: starting - scope is: %o ", $scope);
-                        
-                        $scope.$watch(function() {
+
+                        $scope.$watch(function () {
                             return $scope.meta;
-                        }, function() {
+                        }, function () {
                             if ($scope.meta) {
                                 if ($scope.meta.name) {
                                     $log.debug("MetaController: got name %s", $scope.meta.name);
-                                    
+
                                     // Now let's watch the service for that name
-                                    $scope.$watch(function() {
+                                    $scope.$watch(function () {
                                         return headService.metas[$scope.meta.name];
-                                    }, function() {
+                                    }, function () {
                                         $log.debug("MetaController: headService.metas[%o] = %o", $scope.meta.name, headService.metas[$scope.meta.name]);
                                         $log.debug("MetaController: headService.metas = %o", headService.metas);
                                         if (headService.metas[$scope.meta.name]) {
                                             $scope.meta.content = headService.metas[$scope.meta.name];
                                         }
-                                    });                                    
+                                    });
                                 }
                             }
                         });
