@@ -13,8 +13,8 @@
 
             var that = this;
             that.title = "Unconfigured HeadService";
-            that.metas = {foo:"bar"};
-            that.schema = {foo:"bar"};
+            that.metas = {};
+            that.schema = {};
             that.useRoute = false;
 
             that.setTitle = function (title) {
@@ -54,10 +54,8 @@
                         reset: function () {
                             $log.debug("HeadService: reset");
                             me.title = me.defaultTitle;
-                            if (me.defaultMetas.length)
-                                angular.copy(me.defaultMetas, me.metas);
-                            if (me.defaultSchema.length)
-                                angular.copy(me.defaultSchema, me.schema);
+                            angular.copy(me.defaultMetas, me.metas);
+                            angular.copy(me.defaultSchema, me.schema);
                         }
                     };
 
@@ -81,10 +79,8 @@
 
                     });
 
-                    if (Object.keys(that.metas).length)
-                        angular.copy(that.metas, me.metas);
-                    if (Object.keys(that.schema).length)
-                        angular.copy(that.schema, me.schema);
+                    angular.copy(that.metas, me.defaultMetas);
+                    angular.copy(that.schema, me.defaultSchema);
 
                     me.reset();
 
@@ -169,18 +165,26 @@
         function ($log) {
             return {
                 restrict: 'A',
-                controller: ["$log", "HeadService",
-                    function ($log, headService) {
+                controller: ["$log", "$scope", "HeadService",
+                    function ($log, $scope, headService) {
                         $log.debug("SchemaController: starting");
 
                         var that = this;
+                        that.jsonLd = [];
 
-                        that.headService = headService;
+                        $scope.$watch(function() {
+                            return headService.schema;
+                        }, function() {
+                            that.jsonLd.length = 0;
+                            Object.keys(headService.schema).forEach(function(key) {
+                                that.jsonLd.push(headService.schema[key]);
+                            });
+                        });
                     }
                 ],
                 controllerAs: "schemaCtrl",
                 replace: true,
-                template: '<script type="application/ld+json" data-ng-bind="schemaCtrl.headService.schema"></script>'
+                template: '<script type="application/ld+json" data-ng-bind="schemaCtrl.jsonLd"></script>'
             };
         }
     ]);
