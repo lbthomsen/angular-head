@@ -1,6 +1,6 @@
 {
   "name": "angular-head",
-  "version": "0.0.6",
+  "version": "0.9.0",
   "description": "Angular head service and directives",
   "main": "angular-head.js",
   "scripts": {

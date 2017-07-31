@@ -2,7 +2,6 @@
   "name": "angular-head",
   "description": "Angular head service and directives",
   "main": "angular-head.js",
-  "version": "0.8.6",
   "authors": [
     "Lars Boegild Thomsen <lbthomsen@gmail.com>"
   ],
