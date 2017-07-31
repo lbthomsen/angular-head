@@ -32,7 +32,7 @@
                             headServiceProvider.setMetas({
                                 description: "Set in page",
                                 keywords: "angular,javascript,html,head",
-                                author: "Lars Boegild Thomsen <lth@cow.dk>",
+                                author: "Lars Boegild Thomsen <lbthomsen@gmail.com>",
                                 generator: "Angular"
                             });
                             headServiceProvider.setSchema({
@@ -72,8 +72,9 @@
                                 headService.setTitle(that.title);
                                 headService.setMeta("keywords", that.title);
                                 headService.setMeta("keywords", headService.metas.keywords + "," + headService.defaultMetas.keywords);
+                                headService.schema["WebSite"].name = that.title;
                                 that.title = titles[Math.floor(Math.random() * titles.length)];
-                            }, 1000);
+                            }, 5000);
                         }
                     ]);
 

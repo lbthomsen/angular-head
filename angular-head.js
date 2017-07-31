@@ -179,7 +179,7 @@
                             Object.keys(headService.schema).forEach(function(key) {
                                 that.jsonLd.push(headService.schema[key]);
                             });
-                        });
+                        }, true);
                     }
                 ],
                 controllerAs: "schemaCtrl",
