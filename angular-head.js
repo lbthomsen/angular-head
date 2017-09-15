@@ -96,6 +96,7 @@
         function ($log, headService) {
             return {
                 restrict: 'E',
+                replace: false, 
                 link: function (scope, elem, attrs) {
                     scope.title = elem[0];
                 },
@@ -120,16 +121,17 @@
         }
     ]);
 
-    module.directive('meta', ["$log",
+    module.directive("dynamicMeta", ["$log",
         function ($log) {
             return {
-                restrict: 'E',
+                restrict: 'A',
                 link: function (scope, elem, attrs) {
                     $log.debug("MetaDirective: link");
                     // Store the element in the scope
                     scope.meta = elem[0];
                 },
-                scope: {},
+                scope: {}, 
+                bindToController: {}, 
                 controller: ["$log", "$scope", "$window", "HeadService",
                     function ($log, $scope, $window, headService) {
                         $log.debug("MetaController: starting - scope is: %o ", $scope);
