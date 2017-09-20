@@ -7,13 +7,13 @@ The angular-head module is designed to manipulate html head values (title and me
 The angular-head module can be installed using bower:
 
 ````
-$ bower install angular-head --save
+$ npm install angular-head-lbthomsen --save
 ```
 
 # Load script
 
 ```
-<script type="text/javascript" src="bower_components/angular-head/angular-head.js"></script>
+<script type="text/javascript" src="node_modules/angular-head-lbthomsen/angular-head.js"></script>
 ```
 
 # Inject Angular dependency
