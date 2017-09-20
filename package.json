@@ -1,7 +1,7 @@
 {
-  "name": "angular-head",
+  "name": "angular-head-lbthomsen",
   "version": "0.9.1",
-  "description": "Angular head service and directives",
+  "description": "AngularJS head service and directives",
   "main": "angular-head.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +11,7 @@
     "url": "git+https://github.com/lbthomsen/angular-head.git"
   },
   "keywords": [
-    "angular"
+    "angularjs"
   ],
   "author": "Lars Boegild Thomsen <lbthomsen@gmail.com>",
   "license": "MIT",
