@@ -1,7 +1,7 @@
 /*
  * Angular Head Module
  * 
- * Copyright 2017 by Lars Boegild Thomsen <lbthomsen@gmail.com>
+ * Copyright 2017,2018 by Lars Boegild Thomsen <lbthomsen@gmail.com>
  * 
  */
 (function () {
@@ -121,7 +121,7 @@
         }
     ]);
 
-    module.directive("dynamicMeta", ["$log",
+    module.directive("meta", ["$log",
         function ($log) {
             return {
                 restrict: 'A',
