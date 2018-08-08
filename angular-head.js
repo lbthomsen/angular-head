@@ -124,7 +124,7 @@
     module.directive("meta", ["$log",
         function ($log) {
             return {
-                restrict: 'A',
+                restrict: 'E',
                 link: function (scope, elem, attrs) {
                     $log.debug("MetaDirective: link");
                     // Store the element in the scope
